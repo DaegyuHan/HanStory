@@ -6,6 +6,6 @@ export async function GET(req: Request) {
   const q = url.searchParams.get('q') || ''
   if (!q) return NextResponse.json({ entries: [] })
 
-  const entries = await prisma.entry.findMany({ where: { OR: [{ title: { contains: q, mode: 'insensitive' } }, { content: { contains: q, mode: 'insensitive' } }], deletedAt: null }, orderBy: { date: 'desc' } })
+  const entries = await prisma.entry.findMany({ where: { OR: [{ title: { contains: q } }, { content: { contains: q } }], deletedAt: null }, orderBy: { date: 'desc' } })
   return NextResponse.json({ entries })
 }
