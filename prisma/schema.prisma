@@ -1,0 +1,38 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  username     String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  entries      Entry[]
+}
+
+model Tag {
+  code      String  @id
+  label     String
+  color     String
+  sortOrder Int     @default(0)
+  entries   Entry[]
+}
+
+model Entry {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  date      DateTime
+  tagCode   String
+  tag       Tag      @relation(fields: [tagCode], references: [code])
+  title     String
+  content   String
+  deletedAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
